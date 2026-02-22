@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexLine — Fresh & Bold Web Experiences</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --mint:       #6ACDA4;
+      --mint-light: #6ACDA4A0;
+      --dark:       #0F3D3E;
+      --accent:     #0E948B;
+      --white:      #FFFFFF;
+      --off-white:  #F4FAF8;
+      --text-body:  #1a1a1a;
+      --text-muted: #4a6b6c;
+      --radius:     18px;
+      --radius-sm:  10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--text-body);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw; height: 72px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(106,205,164,0.15);
+      transition: box-shadow .3s;
+    }
+
+    .nav-logo img {
+  height: 45px;   /* ← change cette valeur à ta guise */
+  width: auto;    /* garde les proportions */
+}
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: .9rem; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; position: relative; padding-bottom: 3px;
+      transition: color .2s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px; background: var(--mint);
+      transition: width .3s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-links a:hover { color: var(--dark); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: var(--dark); color: var(--white);
+      border: none; padding: .6rem 1.4rem; border-radius: 99px;
+      font-size: .875rem; font-weight: 500; cursor: pointer;
+      text-decoration: none; transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: var(--accent); transform: translateY(-1px); }
+
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; padding: 100px 5vw 60px; gap: 4rem;
+      background: var(--off-white); position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(106,205,164,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -100px; left: 5vw;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(14,148,139,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(106,205,164,0.15);
+      border: 1px solid rgba(106,205,164,0.4);
+      color: var(--accent); font-size: .8rem; font-weight: 600;
+      padding: .35rem .9rem; border-radius: 99px; margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp .6s .1s forwards;
+    }
+    .hero-badge::before { content: '●'; font-size: .5rem; }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1.07; color: var(--dark); letter-spacing: -.02em;
+      margin-bottom: 1.4rem;
+      opacity: 0; animation: fadeUp .7s .2s forwards;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1.1rem; line-height: 1.75; color: var(--text-muted);
+      max-width: 480px; margin-bottom: 2.4rem;
+      opacity: 0; animation: fadeUp .7s .35s forwards;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; align-items: center;
+      opacity: 0; animation: fadeUp .7s .5s forwards;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--dark); color: var(--white);
+      padding: .9rem 2rem; border-radius: 99px;
+      font-weight: 600; font-size: .95rem; text-decoration: none;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(15,61,62,0.2);
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(14,148,139,0.3); }
+    .btn-secondary {
+      font-weight: 500; color: var(--dark); text-decoration: none;
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .95rem; transition: gap .2s;
+    }
+    .btn-secondary:hover { gap: .8rem; }
+
+    .hero-visual {
+      position: relative; z-index: 1;
+      opacity: 0; animation: fadeIn .9s .4s forwards;
+    }
+    .hero-card-main {
+      background: var(--white); border-radius: 24px; padding: 2rem;
+      box-shadow: 0 20px 60px rgba(15,61,62,0.12), 0 4px 16px rgba(15,61,62,0.06);
+    }
+    .card-label {
+      font-size: .75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text-muted); margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .card-label::before {
+      content: ''; width: 8px; height: 8px;
+      background: var(--mint); border-radius: 50%; display: inline-block;
+    }
+    .mockup-browser {
+      background: var(--off-white); border-radius: var(--radius-sm);
+      overflow: hidden; border: 1px solid rgba(106,205,164,0.2);
+    }
+    .mockup-bar {
+      background: #e8f5f0; padding: .6rem 1rem;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .mockup-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .mockup-dot:nth-child(1) { background: #ff6b6b; }
+    .mockup-dot:nth-child(2) { background: #ffd93d; }
+    .mockup-dot:nth-child(3) { background: var(--mint); }
+    .mockup-url {
+      margin-left: .5rem; background: var(--white);
+      border-radius: 6px; padding: .3rem .8rem;
+      font-size: .7rem; color: var(--text-muted); flex: 1;
+    }
+    .mockup-content { padding: 1.2rem; display: flex; flex-direction: column; gap: .8rem; }
+    .mock-title-bar { background: var(--dark); border-radius: 6px; height: 22px; width: 60%; }
+    .mock-row { display: flex; gap: .5rem; }
+    .mock-block { border-radius: 6px; height: 16px; background: rgba(106,205,164,0.3); }
+    .mock-block.w30 { width: 30%; }
+    .mock-block.w50 { width: 50%; }
+    .mock-block.w70 { width: 70%; }
+    .mock-block.mint { background: var(--mint); height: 40px; }
+    .mock-block.sm { height: 10px; background: rgba(14,148,139,0.2); }
+
+    .hero-card-float {
+      position: absolute; bottom: -24px; left: -32px;
+      background: var(--dark); color: var(--white);
+      border-radius: 16px; padding: 1rem 1.4rem;
+      box-shadow: 0 12px 40px rgba(15,61,62,0.25); min-width: 200px;
+    }
+    .float-stat { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--mint); }
+    .float-label { font-size: .8rem; color: rgba(255,255,255,0.6); margin-top: .1rem; }
+    .hero-card-float2 {
+      position: absolute; top: -20px; right: -24px;
+      background: var(--mint); border-radius: 14px; padding: .9rem 1.2rem;
+      box-shadow: 0 8px 30px rgba(106,205,164,0.35);
+    }
+    .float2-icon { font-size: 1.6rem; }
+    .float2-text { font-size: .78rem; font-weight: 700; color: var(--dark); margin-top: .2rem; }
+
+    section { padding: 100px 5vw; }
+    .section-tag {
+      display: inline-block; font-size: .78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: var(--dark); line-height: 1.15; letter-spacing: -.02em;
+      margin-bottom: 1.2rem;
+    }
+    .section-intro {
+      font-size: 1.05rem; color: var(--text-muted);
+      line-height: 1.75; max-width: 560px;
+    }
+
+    .features { background: var(--white); }
+    .features-header { margin-bottom: 4rem; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--off-white);
+      border: 1px solid rgba(106,205,164,0.2);
+      border-radius: var(--radius); padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(15,61,62,0.1); }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--mint); transform: scaleX(0); transform-origin: left;
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+    }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(106,205,164,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1.4rem; transition: background .2s;
+    }
+    .feature-card:hover .feature-icon { background: var(--mint); }
+    .feature-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem; color: var(--dark); margin-bottom: .6rem;
+    }
+    .feature-desc { font-size: .9rem; line-height: 1.7; color: var(--text-muted); }
+
+    .projects { background: var(--dark); }
+    .projects .section-tag { color: var(--mint); }
+    .projects h2 { color: var(--white); }
+    .projects .section-intro { color: rgba(255,255,255,0.5); }
+    .projects-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: start; margin-top: 4rem;
+    }
+    .projects-list { display: flex; flex-direction: column; gap: 1rem; }
+    .project-item {
+      border: 1px solid rgba(106,205,164,0.15);
+      border-radius: var(--radius); padding: 1.6rem 1.8rem; cursor: pointer;
+      transition: background .25s, border-color .25s, transform .25s;
+    }
+    .project-item:hover, .project-item.active {
+      background: rgba(106,205,164,0.08);
+      border-color: var(--mint); transform: translateX(6px);
+    }
+    .project-item-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: .5rem;
+    }
+    .project-item-name {
+      font-weight: 600; font-size: 1rem; color: var(--white);
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .project-item-num { font-size: .75rem; color: var(--mint); font-weight: 700; }
+    .project-item-desc { font-size: .875rem; color: rgba(255,255,255,0.45); line-height: 1.65; }
+    .project-status {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .7rem; font-weight: 600; padding: .2rem .6rem;
+      border-radius: 99px; margin-top: .7rem;
+    }
+    .project-status.wip { background: rgba(255,193,7,0.15); color: #ffc107; }
+    .project-status.concept { background: rgba(106,205,164,0.15); color: var(--mint); }
+    .project-status.live { background: rgba(106,205,164,0.25); color: var(--mint); }
+    .project-status::before { content: '●'; font-size: .45rem; }
+
+    .projects-visual {
+      position: sticky; top: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(106,205,164,0.15);
+      border-radius: 24px; padding: 2rem;
+    }
+    .visual-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem; color: var(--white); margin-bottom: 1.5rem;
+    }
+    .progress-bar-group { display: flex; flex-direction: column; gap: 1.2rem; }
+    .progress-item-label {
+      display: flex; justify-content: space-between;
+      font-size: .8rem; color: rgba(255,255,255,0.5); margin-bottom: .4rem;
+    }
+    .progress-track {
+      height: 8px; background: rgba(255,255,255,0.08);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--mint), var(--accent));
+      border-radius: 99px; width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .nexos-teaser {
+      margin-top: 2rem; padding: 1.2rem;
+      background: rgba(106,205,164,0.07);
+      border-radius: 12px; border: 1px solid rgba(106,205,164,0.2);
+    }
+    .nexos-teaser-label {
+      font-size: .72rem; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: .08em; margin-bottom: .5rem;
+    }
+    .nexos-teaser-title { font-size: .95rem; color: var(--white); font-weight: 600; margin-bottom: .3rem; }
+    .nexos-teaser-desc { font-size: .82rem; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+    .about { background: var(--off-white); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center; margin-top: 4rem;
+    }
+    .about-mission {
+      font-size: 1.2rem; font-family: 'DM Serif Display', serif;
+      font-style: italic; color: var(--dark); line-height: 1.55;
+      border-left: 4px solid var(--mint); padding-left: 1.4rem; margin: 1.8rem 0;
+    }
+    .about-values { display: flex; flex-direction: column; gap: .8rem; margin-top: 2rem; }
+    .value-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .9rem 1.2rem; background: var(--white); border-radius: var(--radius-sm);
+      border: 1px solid rgba(106,205,164,0.2);
+      font-size: .9rem; font-weight: 500; color: var(--dark);
+      transition: border-color .2s, transform .2s;
+    }
+    .value-row:hover { border-color: var(--mint); transform: translateX(4px); }
+    .v-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: rgba(106,205,164,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .about-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .num-card {
+      background: var(--white); border: 1px solid rgba(106,205,164,0.2);
+      border-radius: var(--radius); padding: 1.8rem;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .num-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(15,61,62,0.08); }
+    .num-card.dark {
+      background: var(--dark); grid-column: span 2;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .num-big {
+      font-family: 'DM Serif Display', serif; font-size: 3rem;
+      color: var(--mint); line-height: 1;
+    }
+    .num-card.dark .num-big { font-size: 3.5rem; }
+    .num-label { font-size: .82rem; color: var(--text-muted); margin-top: .3rem; }
+    .num-card.dark .num-label { color: rgba(255,255,255,0.45); }
+    .num-desc { font-size: .88rem; color: rgba(255,255,255,0.5); max-width: 240px; line-height: 1.6; }
+
+    .roadmap { background: var(--white); }
+    .roadmap h2 { text-align: center; }
+    .roadmap .section-tag { display: block; text-align: center; }
+    .roadmap .section-intro { text-align: center; margin: 0 auto 3.5rem; }
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 700px; margin: 0 auto; position: relative;
+    }
+    .timeline::before {
+      content: ''; position: absolute; left: 24px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(180deg, var(--mint), rgba(106,205,164,0.1));
+    }
+    .tl-item {
+      display: flex; gap: 2rem; padding: 0 0 2.5rem 0;
+      opacity: 0; transform: translateX(-16px);
+      transition: opacity .6s, transform .6s;
+    }
+    .tl-item.visible { opacity: 1; transform: none; }
+    .tl-dot {
+      width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; position: relative; z-index: 1;
+      border: 2px solid rgba(106,205,164,0.3);
+      background: var(--white);
+    }
+    .tl-dot.done { background: var(--mint); border-color: var(--mint); }
+    .tl-dot.wip { background: var(--dark); border-color: var(--mint); }
+    .tl-dot.soon { background: var(--off-white); }
+    .tl-content { padding: .6rem 0; flex: 1; }
+    .tl-period {
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--accent); margin-bottom: .3rem;
+    }
+    .tl-title {
+      font-family: 'DM Serif Display', serif; font-size: 1.15rem;
+      color: var(--dark); margin-bottom: .4rem;
+    }
+    .tl-desc { font-size: .88rem; color: var(--text-muted); line-height: 1.65; }
+    .tl-tag {
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .7rem; font-weight: 600; padding: .2rem .6rem;
+      border-radius: 99px; margin-top: .6rem;
+    }
+    .tl-tag.done { background: rgba(106,205,164,0.15); color: var(--accent); }
+    .tl-tag.wip { background: rgba(255,193,7,0.15); color: #d4a017; }
+    .tl-tag.soon { background: rgba(15,61,62,0.08); color: var(--text-muted); }
+
+    .cta-section {
+      background: var(--dark); text-align: center;
+      padding: 120px 5vw; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(106,205,164,0.12) 0%, transparent 65%);
+    }
+    .cta-section .section-tag { color: var(--mint); }
+    .cta-section h2 { color: var(--white); margin: 0 auto 1.2rem; max-width: 600px; }
+    .cta-section p {
+      color: rgba(255,255,255,0.45); font-size: 1.05rem;
+      margin-bottom: 2.5rem; max-width: 480px;
+      margin-left: auto; margin-right: auto;
+    }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; align-items: center; position: relative; }
+    .btn-mint {
+      background: var(--mint); color: var(--dark);
+      padding: 1rem 2.2rem; border-radius: 99px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 6px 30px rgba(106,205,164,0.35);
+    }
+    .btn-mint:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(106,205,164,0.5); }
+    .btn-ghost {
+      border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.65);
+      padding: 1rem 2rem; border-radius: 99px;
+      font-weight: 500; font-size: .95rem; text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--mint); color: var(--mint); }
+
+    footer {
+      background: #071f20; padding: 3rem 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; color: var(--white); text-decoration: none;
+    }
+    .footer-logo span { color: var(--mint); }
+    footer p { font-size: .8rem; color: rgba(255,255,255,0.3); text-align: center; flex: 1; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      font-size: .82rem; color: rgba(255,255,255,0.3);
+      text-decoration: none; transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--mint); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* Reveal : état initial, rendu visible par JS via IntersectionObserver */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 120px; }
+      .hero-visual { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .projects-layout, .about-grid { grid-template-columns: 1fr; }
+      .projects-visual { position: static; }
+      .about-numbers { grid-template-columns: 1fr; }
+      .num-card.dark { grid-column: span 1; flex-direction: column; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo"><img src="../logo/png/canon/Mint on trans.png" alt="Logo NexLine"></a>
+    <ul class="nav-links">
+      <li><a href="#features">Vision</a></li>
+      <li><a href="#projets">Projets</a></li>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Suivre le projet →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">Projet indépendant — en construction</div>
+      <h1>Le web oublie<br />des millions de<br /><em>gens.</em> Pas nous.</h1>
+      <p class="hero-sub">
+        NexLine construit des outils numériques radicalement clairs — 
+        pour les seniors, les débutants, et tous ceux que le web a laissés de côté.
+      </p>
+      <div class="hero-actions">
+        <a href="#projets" class="btn-primary">Voir nos projets →</a>
+        <a href="#about" class="btn-secondary">Qui on est →</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-main">
+        <div class="card-label">Aperçu — NexOS en dev</div>
+        <div class="mockup-browser">
+          <div class="mockup-bar">
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+            <div class="mockup-url">nexline.io/nexos</div>
+          </div>
+          <div class="mockup-content">
+            <div class="mock-title-bar"></div>
+            <div class="mock-row">
+              <div class="mock-block mint w50"></div>
+              <div class="mock-block w30" style="background:rgba(15,61,62,0.15)"></div>
+            </div>
+            <div class="mock-row"><div class="mock-block sm w70"></div></div>
+            <div class="mock-row"><div class="mock-block sm w50"></div></div>
+            <div class="mock-row" style="margin-top:.4rem">
+              <div class="mock-block w30" style="background:var(--dark);height:20px;border-radius:99px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card-float">
+        <div class="float-stat">2026</div>
+        <div class="float-label">Bêta NexOS prévue</div>
+      </div>
+      <div class="hero-card-float2">
+        <div class="float2-icon">🛠️</div>
+        <div class="float2-text">En cours de build</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION / FEATURES -->
+  <section class="features" id="features">
+    <div class="features-header reveal">
+      <span class="section-tag">Notre philosophie</span>
+      <h2>Conçu pour <em style="font-style:italic;color:var(--accent)">l'humain</em>,<br/>pas pour l'écran.</h2>
+      <p class="section-intro">
+        Chaque décision de design part d'une question simple : est-ce que ma grand-mère comprendrait ? 
+        Si non, on recommence. C'est notre seul critère.
+      </p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal" style="transition-delay:.1s">
+        <div class="feature-icon">🔠</div>
+        <div class="feature-title">Typographie Souveraine</div>
+        <p class="feature-desc">Des titres qui guident l'œil naturellement. Police lisible, taille généreuse, contraste parfait. On ne joue pas avec ça.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.2s">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">Couleurs Fonctionnelles</div>
+        <p class="feature-desc">Menthe et profondeur. Une palette restreinte choisie pour sa lisibilité émotionnelle et cognitive, pas pour son effet.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.3s">
+        <div class="feature-icon">♿</div>
+        <div class="feature-title">Accessibilité Totale</div>
+        <p class="feature-desc">WCAG 2.1 AA minimum sur chaque projet qu'on construit. Lecteurs d'écran, navigation clavier, contraste — tout est testé.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.15s">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Performances Réelles</div>
+        <p class="feature-desc">Un outil lent, c'est un outil qui exclut. Chargement rapide, code propre, aucun superflu. C'est non-négociable.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.25s">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">100% Responsive</div>
+        <p class="feature-desc">Téléphone, tablette, grand écran. L'expérience reste identique partout. Les seniors aussi ont un smartphone.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.35s">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Zéro Jargon</div>
+        <p class="feature-desc">On construit pour des gens qui n'ont pas grandi avec un ordinateur. Si ça nécessite un manuel, c'est raté.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETS -->
+  <section class="projects" id="projets">
+    <div class="reveal">
+      <span class="section-tag">Ce qu'on construit</span>
+      <h2>Nos projets,<br />de A à Z.</h2>
+      <p class="section-intro">
+        On construit nos propres outils parce qu'on croit à ce qu'on fait — 
+        pas pour répondre à des commandes. Chaque projet naît d'une conviction, pas d'un brief.
+      </p>
+    </div>
+    <div class="projects-layout">
+      <div class="projects-list reveal">
+        <div class="project-item active">
+          <div class="project-item-header">
+            <div class="project-item-name"><span>🚀</span> NexOS</div>
+            <span class="project-item-num">01</span>
+          </div>
+          <p class="project-item-desc">Un système d'exploitation web pensé pour les débutants complets et les seniors. Grande typo, icônes claires, zéro jargon. Simple comme un interrupteur.</p>
+          <div class="project-status wip">En développement actif</div>
+        </div>
+        <div class="project-item">
+          <div class="project-item-header">
+            <div class="project-item-name"><span>🖥️</span> NexLine.io</div>
+            <span class="project-item-num">02</span>
+          </div>
+          <p class="project-item-desc">Ce site — vitrine du studio et manifeste de notre vision. Design, code et contenu sont notre première démonstration concrète.</p>
+          <div class="project-status live">En ligne</div>
+        </div>
+        <div class="project-item">
+          <div class="project-item-header">
+            <div class="project-item-name"><span>📖</span> NexGuide</div>
+            <span class="project-item-num">03</span>
+          </div>
+          <p class="project-item-desc">Un guide interactif d'initiation au numérique — sans supposer la moindre connaissance préalable. Progressif, bienveillant, concret.</p>
+          <div class="project-status concept">En conception</div>
+        </div>
+        <div class="project-item">
+          <div class="project-item-header">
+            <div class="project-item-name"><span>🧰</span> Design System NexLine</div>
+            <span class="project-item-num">04</span>
+          </div>
+          <p class="project-item-desc">Le socle commun de tous nos projets : composants, typographies, couleurs et règles d'accessibilité documentées et réutilisables.</p>
+          <div class="project-status wip">En cours</div>
+        </div>
+      </div>
+      <div class="projects-visual reveal" style="transition-delay:.2s">
+        <div class="visual-title">Avancement NexOS</div>
+        <div class="progress-bar-group" id="progressBars">
+          <div>
+            <div class="progress-item-label"><span>Architecture UI</span><span>10%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="10"></div></div>
+          </div>
+          <div>
+            <div class="progress-item-label"><span>Accessibilité WCAG</span><span>15%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="15"></div></div>
+          </div>
+          <div>
+            <div class="progress-item-label"><span>Tests utilisateurs</span><span>0%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="0"></div></div>
+          </div>
+          <div>
+            <div class="progress-item-label"><span>Version bêta publique</span><span>0%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="0"></div></div>
+          </div>
+        </div>
+        <div class="nexos-teaser">
+          <div class="nexos-teaser-label">Objectif 2026</div>
+          <div class="nexos-teaser-title">🚀 NexOS — Interface web pour tous</div>
+          <div class="nexos-teaser-desc">Un OS web radicalement accessible. Grande typo, icônes claires, zéro jargon. La bêta publique est l'objectif de 2026.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="reveal">
+        <span class="section-tag">Qui on est</span>
+        <h2>Une conviction,<br/>des projets,<br /><em style="font-style:italic;color:var(--accent)">une direction.</em></h2>
+        <p class="section-intro">
+          NexLine est né d'une observation simple : le web exclut des millions de personnes 
+          non pas par fatalité, mais à cause de mauvaises décisions de design — 
+          prises par des gens qui oublient que tout le monde n'est pas comme eux.
+        </p>
+        <div class="about-mission">
+          "La technologie devrait se sentir humaine, compréhensible, et empuissantante — peu importe votre âge ou votre niveau."
+        </div>
+        <div class="about-values">
+          <div class="value-row"><div class="v-icon">🎯</div>Clarté avant tout</div>
+          <div class="value-row"><div class="v-icon">🤝</div>Empathie par défaut</div>
+          <div class="value-row"><div class="v-icon">🔍</div>Honnêteté technique</div>
+          <div class="value-row"><div class="v-icon">🌱</div>Construction progressive, pas à pas</div>
+        </div>
+      </div>
+      <div class="about-numbers reveal" style="transition-delay:.15s">
+        <div class="num-card dark">
+          <div>
+            <div class="num-big">+2B</div>
+            <div class="num-label">personnes exclues du numérique aujourd'hui</div>
+          </div>
+          <div class="num-desc">Seniors, débutants, personnes en situation de handicap — le web les oublie. NexLine est construit pour eux.</div>
+        </div>
+        <div class="num-card">
+          <div class="num-big">98%</div>
+          <div class="num-label">des sites web échouent aux tests d'accessibilité de base</div>
+        </div>
+        <div class="num-card">
+          <div class="num-big">∞</div>
+          <div class="num-label">potentiel d'un web réellement inclusif</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="roadmap" id="roadmap">
+    <span class="section-tag reveal">Où on en est</span>
+    <h2 class="reveal">La route<br/>du studio.</h2>
+    <p class="section-intro reveal">Pas de feuille de route marketing. Juste ce qu'on a fait, ce qu'on fait, et où on va.</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot done">✓</div>
+        <div class="tl-content">
+          <div class="tl-period">2025 — Début</div>
+          <div class="tl-title">Les débuts</div>
+          <p class="tl-desc">Définition de la mission, de la vision, des valeurs. Premier design system et choix techniques fondateurs.</p>
+          <div class="tl-tag done">✓ Terminé</div>
+        </div>
+      </div>
+      <div class="tl-item" style="transition-delay:.1s">
+        <div class="tl-dot done">✓</div>
+        <div class="tl-content">
+          <div class="tl-period">2025 — 2026</div>
+          <div class="tl-title">NexLine.io — ce site</div>
+          <p class="tl-desc">Premier projet public : la vitrine du studio, manifeste de notre vision et démonstration de nos choix de design.</p>
+          <div class="tl-tag done">✓ En ligne</div>
+        </div>
+      </div>
+      <div class="tl-item" style="transition-delay:.2s">
+        <div class="tl-dot wip">⚡</div>
+        <div class="tl-content">
+          <div class="tl-period">2026 — En cours</div>
+          <div class="tl-title">NexOS — Architecture & UI</div>
+          <p class="tl-desc">Construction de l'interface OS web : composants, navigation, accessibilité. La phase de conception est en cours.</p>
+          <div class="tl-tag wip">⚡ En développement</div>
+        </div>
+      </div>
+      <div class="tl-item" style="transition-delay:.3s">
+        <div class="tl-dot soon">○</div>
+        <div class="tl-content">
+          <div class="tl-period">2026 — À venir</div>
+          <div class="tl-title">NexOS Bêta publique</div>
+          <p class="tl-desc">Première version testable par de vrais utilisateurs. Tests avec des seniors, itérations, corrections. Le vrai départ.</p>
+          <div class="tl-tag soon">○ Prévu</div>
+        </div>
+      </div>
+      <div class="tl-item" style="transition-delay:.4s">
+        <div class="tl-dot soon">○</div>
+        <div class="tl-content">
+          <div class="tl-period">2026–2027 — Vision</div>
+          <div class="tl-title">NexGuide & Écosystème</div>
+          <p class="tl-desc">Élargissement : guide interactif d'initiation, outils complémentaires, communauté. NexLine prend de l'ampleur.</p>
+          <div class="tl-tag soon">○ En conception</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <span class="section-tag reveal">Envie de suivre ?</span>
+    <h2 class="reveal">On construit quelque<br/>chose qui compte.<br/>Rejoins l'aventure.</h2>
+    <p class="reveal">Tu es curieux du projet, tu veux échanger sur la vision, ou simplement rester informé de l'avancement ? On est là.</p>
+    <div class="cta-actions reveal">
+      <a href="mailto:contact@nexline.io" class="btn-mint">Nous écrire →</a>
+      <a href="#roadmap" class="btn-ghost">Voir la roadmap</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo">Nex<span>Line</span></a>
+    <p>© 2026 NexLine — Construit pour les humains.</p>
+    <div class="footer-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════
+       JS — LE VRAI BUG : ce bloc était absent de ta page.
+       Sans lui, les classes .visible ne sont jamais ajoutées
+       et tout reste à opacity:0.
+       ═══════════════════════════════════════════════════════ -->
+  <script>
+    // 1. Nav shadow au scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // 2. IntersectionObserver — active .reveal et .tl-item quand ils entrent dans le viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // one-shot : on n'observe plus une fois visible
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .tl-item').forEach(el => observer.observe(el));
+
+    // 3. Progress bars — anime width quand la section entre dans le viewport
+    const progressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.progress-fill').forEach(bar => {
+            setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 200);
+          });
+          progressObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const progressSection = document.getElementById('progressBars');
+    if (progressSection) progressObserver.observe(progressSection);
+
+    // 4. Project items — click pour activer
+    document.querySelectorAll('.project-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.project-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
